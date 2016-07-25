@@ -53,37 +53,37 @@ set -e
 : ${S3_PATH:?"S3_PATH env variable is required (s3://blabla/)"}
 : ${DATA_PATH:?"DATA_PATH env variable is required (/app)"}
 : ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (sync - backup)"}
-: ${SLEEP:?"SLEEP env variable is required (1h 1d 1w ...)"}
+: ${SLEEP:?"SLEEP env variable is required (1h 1d 7d 30d ...)"}
 
-echo "access_key=$ACCESS_KEY" >> /tmp/s3cfg
-echo "secret_key=$SECRET_KEY" >> /tmp/s3cfg
+echo "access_key=${ACCESS_KEY}" >> /tmp/s3cfg
+echo "secret_key=${SECRET_KEY}" >> /tmp/s3cfg
 
 # Backup
-if [ $BACKUP_TYPE == "backup" ]
+if [ ${BACKUP_TYPE} == "backup" ]
 then
 STAMP=$(date)
-echo "[${STAMP}] Starting backup to [$S3_PATH/backup/$STAMP/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/backup/${STAMP}/"
+echo "[${STAMP}] Starting backup to [${S3_PATH}/backup/${STAMP}/] ..."
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync ${PARAMS} "${DATA_PATH}" "${S3_PATH}/backup/${STAMP}/"
 STAMP=$(date)
-echo "[${STAMP}] Done making a backup to [$S3_PATH/backup/${STAMP}/] ..."
+echo "[${STAMP}] Done making a backup to [${S3_PATH}/backup/${STAMP}/] ..."
 fi
 
 # Backup
-if [ $BACKUP_TYPE == "sync" ]
+if [ ${BACKUP_TYPE} == "sync" ]
 then
 # Sync
 STAMP=$(date)
 echo "[${STAMP}] Starting sync to [$S3_PATH/sync/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/sync/"
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync ${PARAMS} "${DATA_PATH}" "${S3_PATH}/sync/"
 STAMP=$(date)
 echo "[${STAMP}] Done syncing to [$S3_PATH/sync/] ..."
 fi
 
 # Sleep
 STAMP=$(date)
-echo "[${STAMP}] Sleeping for [$SLEEP] ..."
+echo "[${STAMP}] Sleeping for [${SLEEP}] ..."
 
-sleep $SLEEP
+sleep ${SLEEP}
 
 # Bye Bye
 STAMP=$(date)
