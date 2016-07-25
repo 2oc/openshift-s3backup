@@ -7,7 +7,7 @@ RUN apk upgrade && \
  apk add --update bash ca-certificates python py-pip && \
  pip install python-dateutil python-magic s3cmd
 
-RUN chmod -R 755 /scripts
+RUN chmod -R a+rx /scripts
 
 WORKDIR /scripts
 

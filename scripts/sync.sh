@@ -1,7 +1,7 @@
 #!/bin/bash
 
 # Base Config
-cat << EOF > /scripts/s3cfg
+cat << EOF > /tmp/s3cfg
 [default]
 bucket_location = Ireland
 cloudfront_host = cloudfront.amazonaws.com
@@ -56,13 +56,13 @@ set -e
 : ${DATA_PATH:?"DATA_PATH env variable is required (/app)"}
 : ${SLEEP:?"SLEEP env variable is required (1h 1d 1w ...)"}
 
-echo "access_key=$ACCESS_KEY" >> /scripts/s3cfg
-echo "secret_key=$SECRET_KEY" >> /scripts/s3cfg
+echo "access_key=$ACCESS_KEY" >> /tmp/s3cfg
+echo "secret_key=$SECRET_KEY" >> /tmp/s3cfg
 
 STAMP=$(date)
 echo "[${STAMP}] Starting sync to [$S3_PATH] ..."
 
-/usr/bin/s3cmd --config=/scripts/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH"
+/usr/bin/s3cmd --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH"
 
 STAMP=$(date)
 echo "[${STAMP}] Done syncing to [$S3_PATH] ..."
