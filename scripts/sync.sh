@@ -46,8 +46,6 @@ website_error =
 website_index = index.html
 EOF
 
-env
-
 # Check env vars
 set -e
 : ${ACCESS_KEY:?"ACCESS_KEY env variable is required"}
@@ -59,18 +57,31 @@ set -e
 echo "access_key=$ACCESS_KEY" >> /tmp/s3cfg
 echo "secret_key=$SECRET_KEY" >> /tmp/s3cfg
 
+# Date for backup
+TODAY=$(date "+%F")
+
+# Backup
 STAMP=$(date)
 echo "[${STAMP}] Starting sync to [$S3_PATH] ..."
-
-/usr/bin/s3cmd --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH"
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/backup/$TODAY/$HOSTNAME"
 
 STAMP=$(date)
 echo "[${STAMP}] Done syncing to [$S3_PATH] ..."
 
+# Sync
+STAMP=$(date)
+echo "[${STAMP}] Starting sync to [$S3_PATH] ..."
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/sync"
+
+STAMP=$(date)
+echo "[${STAMP}] Done syncing to [$S3_PATH] ..."
+
+# Sleep
 STAMP=$(date)
 echo "[${STAMP}] Sleeping for [$SLEEP] ..."
 
 sleep ${SLEEP}
 
+# Bye Bye
 STAMP=$(date)
 echo "[${STAMP}] Bye Bye..."

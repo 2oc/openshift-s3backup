@@ -5,9 +5,9 @@ ADD scripts/sync.sh /scripts/sync.sh
 
 RUN apk upgrade && \
  apk add --update bash ca-certificates python py-pip && \
- pip install python-dateutil python-magic s3cmd
-
-RUN chmod -R a+rx /scripts
+ pip install python-dateutil python-magic s3cmd && \
+ chmod -R a+rx /scripts && \
+ rm -f /var/cache/apk/*
 
 WORKDIR /scripts
 
