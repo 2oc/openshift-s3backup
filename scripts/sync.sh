@@ -63,9 +63,9 @@ if [ $BACKUP_TYPE == "backup" ]
 then
 STAMP=$(date)
 echo "[${STAMP}] Starting backup to [$S3_PATH/backup/$STAMP/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/backup/$STAMP/"
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/backup/${STAMP}/"
 STAMP=$(date)
-echo "[${STAMP}] Done making a backup to [$S3_PATH/backup/$STAMP/] ..."
+echo "[${STAMP}] Done making a backup to [$S3_PATH/backup/${STAMP}/] ..."
 fi
 
 # Backup
