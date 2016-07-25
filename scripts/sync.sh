@@ -62,11 +62,11 @@ TODAY=$(date "+%F")
 
 # Backup
 STAMP=$(date)
-echo "[${STAMP}] Starting sync to [$S3_PATH] ..."
+echo "[${STAMP}] Starting backup to [$S3_PATH] ..."
 /usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync $PARAMS "$DATA_PATH" "$S3_PATH/backup/$TODAY/$HOSTNAME"
 
 STAMP=$(date)
-echo "[${STAMP}] Done syncing to [$S3_PATH] ..."
+echo "[${STAMP}] Done making a backup to [$S3_PATH] ..."
 
 # Sync
 STAMP=$(date)
