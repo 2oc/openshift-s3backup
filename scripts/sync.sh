@@ -83,7 +83,7 @@ fi
 STAMP=$(date)
 echo "[${STAMP}] Sleeping for [$SLEEP] ..."
 
-sleep ${SLEEP}
+sleep $SLEEP
 
 # Bye Bye
 STAMP=$(date)
