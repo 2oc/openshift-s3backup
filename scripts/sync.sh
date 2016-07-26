@@ -3,7 +3,7 @@
 # Base Config
 cat << EOF > /tmp/s3cfg
 [default]
-bucket_location = Ireland
+bucket_location = eu-west-1
 cloudfront_host = cloudfront.amazonaws.com
 default_mime_type = binary/octet-stream
 delete_removed = False
