@@ -50,9 +50,9 @@ EOF
 set -e
 : ${ACCESS_KEY:?"ACCESS_KEY env variable is required"}
 : ${SECRET_KEY:?"SECRET_KEY env variable is required"}
-: ${S3_PATH:?"S3_PATH env variable is required (s3://blabla/)"}
+: ${S3_PATH:?"S3_PATH env variable is required (s3://bucketname/yourbackupname)"}
 : ${DATA_PATH:?"DATA_PATH env variable is required (/app)"}
-: ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (sync - backup)"}
+: ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (backup - upload)"}
 : ${SLEEP:?"SLEEP env variable is required (1h 1d 7d 30d ...)"}
 : ${EXPIRE:?"EXPIRE env variable is required (7 14 30 60 90 ...) days"}
 
@@ -64,7 +64,7 @@ if [ ${BACKUP_TYPE} == "backup" ]
 then
 STAMP=$(date)
 echo "[${STAMP}] Starting backup to [${S3_PATH}/backup/${STAMP}/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync "${DATA_PATH}" "${S3_PATH}/backup/${STAMP}/"
+/usr/bin/s3cmd --no-mime-magic --no-preserve --no-progress --config=/tmp/s3cfg put -r "${DATA_PATH}" "${S3_PATH}/backup/${STAMP}/"
 STAMP=$(date)
 echo "[${STAMP}] Done making a backup to [${S3_PATH}/backup/${STAMP}/] ..."
 
@@ -75,14 +75,14 @@ echo "[${STAMP}] Done setting expiry on [${S3_PATH}/backup/${STAMP}/] ..."
 fi
 
 # Backup
-if [ ${BACKUP_TYPE} == "sync" ]
+if [ ${BACKUP_TYPE} == "upload" ]
 then
 # Sync
 STAMP=$(date)
-echo "[${STAMP}] Starting sync to [$S3_PATH/sync/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync ${PARAMS} "${DATA_PATH}" "${S3_PATH}/sync/"
+echo "[${STAMP}] Starting upload to [$S3_PATH/upload/] ..."
+/usr/bin/s3cmd --no-mime-magic --no-preserve --no-progress --config=/tmp/s3cfg put -r "${DATA_PATH}" "${S3_PATH}/upload/"
 STAMP=$(date)
-echo "[${STAMP}] Done syncing to [$S3_PATH/sync/] ..."
+echo "[${STAMP}] Done upload to [$S3_PATH/upload/] ..."
 fi
 
 # Sleep
