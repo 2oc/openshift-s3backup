@@ -56,13 +56,14 @@ set -e
 : ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (backup - upload)"}
 : ${BACKUP_SLEEP:?"BACKUP_SLEEP env variable is required (1h 1d 7d 30d ...)"}
 : ${BACKUP_EXPIRE:?"BACKUP_EXPIRE env variable is required (7d 14d 30d 60d 90d ...) days"}
+: ${OPENSHIFT_WEEPEE_ID:?"OPENSHIFT_WEEPEE_ID env variable is required"}
 
 # Add credentials to config
 echo "access_key=${AWS_ACCESS_KEY}" >> /tmp/s3cfg
 echo "secret_key=${AWS_SECRET_KEY}" >> /tmp/s3cfg
 
 # Create S3 Path
-S3_PATH="${S3_BUCKET}/${BACKUP_NAME}"
+S3_PATH="${S3_BUCKET}/${OPENSHIFT_WEEPEE_ID}/${BACKUP_NAME}"
 
 # Remove alpha chars from BACKUP_EXPIRE
 BACKUP_EXPIRE=$(printf '%s\n' "${BACKUP_EXPIRE//[[:alpha:]]/}")
