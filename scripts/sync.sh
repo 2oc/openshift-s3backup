@@ -54,6 +54,7 @@ set -e
 : ${DATA_PATH:?"DATA_PATH env variable is required (/app)"}
 : ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (sync - backup)"}
 : ${SLEEP:?"SLEEP env variable is required (1h 1d 7d 30d ...)"}
+: ${EXPIRE:?"EXPIRE env variable is required (30 60 90 ...) days"}
 
 echo "access_key=${ACCESS_KEY}" >> /tmp/s3cfg
 echo "secret_key=${SECRET_KEY}" >> /tmp/s3cfg
@@ -63,9 +64,14 @@ if [ ${BACKUP_TYPE} == "backup" ]
 then
 STAMP=$(date)
 echo "[${STAMP}] Starting backup to [${S3_PATH}/backup/${STAMP}/] ..."
-/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync ${PARAMS} "${DATA_PATH}" "${S3_PATH}/backup/${STAMP}/"
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg sync "${DATA_PATH}" "${S3_PATH}/backup/${STAMP}/"
 STAMP=$(date)
 echo "[${STAMP}] Done making a backup to [${S3_PATH}/backup/${STAMP}/] ..."
+
+echo "[${STAMP}] Setting expiry on [${S3_PATH}/backup/${STAMP}/] ..."
+/usr/bin/s3cmd --no-preserve --no-progress --config=/tmp/s3cfg expire --expiry-days="${EXPIRE}" --expiry-prefix="${S3_PATH}/backup/${STAMP}/" "${S3_PATH}"
+STAMP=$(date)
+echo "[${STAMP}] Done setting expiry on [${S3_PATH}/backup/${STAMP}/] ..."
 fi
 
 # Backup
