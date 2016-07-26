@@ -54,7 +54,7 @@ set -e
 : ${DATA_PATH:?"DATA_PATH env variable is required (/app)"}
 : ${BACKUP_TYPE:?"BACKUP_TYPE env variable is required (sync - backup)"}
 : ${SLEEP:?"SLEEP env variable is required (1h 1d 7d 30d ...)"}
-: ${EXPIRE:?"EXPIRE env variable is required (30 60 90 ...) days"}
+: ${EXPIRE:?"EXPIRE env variable is required (7 14 30 60 90 ...) days"}
 
 echo "access_key=${ACCESS_KEY}" >> /tmp/s3cfg
 echo "secret_key=${SECRET_KEY}" >> /tmp/s3cfg
