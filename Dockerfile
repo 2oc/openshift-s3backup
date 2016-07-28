@@ -17,7 +17,6 @@ ENTRYPOINT ["/scripts/sync.sh"]
 LABEL io.k8s.description="S3 Backup" \
       io.k8s.display-name="S3 Bacup" \
       io.openshift.expose-services="" \
-      io.openshift.tags="builder,asterisk" \
       io.openshift.min-memory="1Gi" \
       io.openshift.min-cpu="1" \
       io.openshift.non-scalable="false"
